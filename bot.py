@@ -126,19 +126,43 @@ def data_spawn(id):
         value=random.randint(1000, 2000)
     uid=idgen()
     kb=types.InlineKeyboardMarkup()
-    kb.add(types.InlineKeyboardButton(text='Новые данные!', callback_data='catch '+uid))
-    bot.send_message(id, convert(what=cdata, to='emoji')+' ('+str(value)+')')
-    cdatas.insert_one(createdata(cdata, value, id, time.time(), msg.message_id))
+    kb.add(types.InlineKeyboardButton(text=convert(what=cdata, to='emoji')+' ('+str(value)+')', callback_data='catch '+uid))
+    msg=bot.send_message(id, 'Новые данные!', reply_markup=kb)
+    cdatas.insert_one(createdata(cdata, value, id, time.time(), msg.message_id, uid))
     
     
-  
-def createdata(cdata, value, id, ctime, msgid):
+
+    
+def convert(what, to):
+    if to=='emoji':
+        if what=='data_romb_blue':
+            return '🔹'
+        if what=='data_romb_orange':
+            return '🔸'
+        if what=='data_triangle_red':
+            return '🔻'
+        if what=='data_circle_black':
+            return '⚫'
+        if what=='data_volume':
+            return '🔊'
+        if what=='data_energy':
+            return '🔋'
+        if what=='data_time':
+            return '⏱'
+        if what=='data_universal':
+            return '🧿'
+    return 'error'
+        
+
+
+def createdata(cdata, value, id, ctime, msgid, uid):
     return {
         'type':cdata,
         'value':value,
         'chatid':id,
         'createtime':ctime,
-        'message_id':msgid
+        'message_id':msgid,
+        'uid':uid
     }
 
 
